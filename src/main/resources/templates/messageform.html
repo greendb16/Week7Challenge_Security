@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <th:block th:replace="base :: Meta">...</th:block>
+    <title>Title</title>
+</head>
+<body>
+<th:block th:replace="base :: navbar">...</th:block>
+
+<br/><br/><br/>
+<div class="container">
+    <div class="jumbotron">
+        <form action="#" th:action="@{/process}" th:object="${message}" method="post"  id="inputForm">
+            <input type="hidden" th:field="*{id}"/>
+            <input type="hidden" th:field="*{author}" th:value="${user.getUsername()}">
+            <!--<input type="hidden" th:field="*{author}" th:value="${#authentication.name}">-->
+
+            Title: <input type="text" th:field="*{title}">
+            <span th:if="${#fields.hasErrors('title')}"
+                  th:errors="*{title}"></span><br/><br/>
+
+            <div class="form-group">
+                Content: <textarea class="form-control" id="contentForm" rows="3" th:field="*{content}" />
+                <span th:if="${#fields.hasErrors('content')}"
+                      th:errors="*{content}"></span><br/>
+            </div>
+
+
+            Date Posted: <input type="text" class="form-control" id="datePosted"
+                                 th:field="*{date}">
+            <span th:if="${#fields.hasErrors('date')}"
+                  th:errors="*{date}"></span><br/>
+
+
+
+            <!--Posted by: <input type="text" th:field="*{postedBy}">-->
+            <!--<span th:if="${#fields.hasErrors('postedBy')}"-->
+                  <!--th:errors="*{postedBy}"></span><br>-->
+
+
+            <!--<div class="form-group">-->
+                <!--Add a Pic: <input type="file" class="form-control-file" name="file"   id="exampleFormControlFile1">-->
+                <!--<span th:if="${#fields.hasErrors('pic')}"-->
+                      <!--th:errors="*{pic}"></span>-->
+            <!--</div>-->
+            <input type="submit" value="Post">
+
+
+        </form>
+    </div>
+</div>
+<th:block th:replace="base :: bootstrap">...</th:block>
+</body>
+</html>

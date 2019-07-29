@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <th:block th:replace="base :: Meta">...</th:block>
+    <title>Title</title>
+</head>
+<body>
+<th:block th:replace="base :: navbar">...</th:block>
+<br/><br/><br/>
+<div class="container">
+    <div class="jumbotron">
+        <h2 align="center">[[${message.title}]]</h2><br/><br/>
+        <p align="center" style="font-size: x-large">[[${message.content}]]</p><br/>
+        <!--<div th:if="${message.pic}" !="null">-->
+            <!--<img th:src="${message.pic}" alt="Post Pic"  id="showPic"  width="200px" height="200px"  />-->
+
+        <!--</div>-->
+        <br/><br/>
+        <p style="float: left"><b>Posted By:</b> [[${message.user}]]         <b>Date Posted:</b> [[${message.date}]] </p><br/><br/>
+        <div th:align="center">
+            <a  class="btn btn-primary" role="button" th:href="@{/update/{id} (id=${message.id})}">Update This Post</a>
+            <div sec:authorize="hasAuthority('admin')">
+            <a  class="btn btn-danger" role="button" th:href="@{/delete/{id} (id=${message.id})}">Delete This Post</a>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:replace="base :: bootstrap">...</th:block>
+</body>
+</html>

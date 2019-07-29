@@ -1,12 +1,11 @@
 package com.example.demo;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -22,41 +21,58 @@ public class HomeController {
     @Autowired
     UserRepository userRepository;
 
-    @GetMapping("/register")
-    public String showRegistrationPage(Model model){
-        model.addAttribute("user",  new User());
-        return "registration";
-    }
-
-    @PostMapping("/register")
-    public String processRegistrationPage(@Valid @ModelAttribute("user") User user, BindingResult result, Model model){
-        model.addAttribute("user", user);
-        if (result.hasErrors()){
-            return "registration";
-        }
-        else{
-            userService.saveUser(user);
-            model.addAttribute("message", "User Account Created");
-        }
-        return "index";
-    }
-
-    @RequestMapping("/home")
-    public String index(){
-        return "index";
-    }
+    @Autowired
+    MessageRepository messageRepository;
 
     @RequestMapping("/")
+    public String home(Model model){
+        model.addAttribute("messages", messageRepository.findAll());
+        model.addAttribute("users",userRepository.findAll());
+        return "home";
+    }
+
+    @GetMapping("/add")
+    public String addMessage(Principal principal, Model model){
+        String username = principal.getName();
+        model.addAttribute("message", new Message());
+        model.addAttribute("user", userRepository.findByUsername(username));
+        return "messageform";
+    }
+
+    @PostMapping("/process")
+    public String processMessage(@Valid Message message, BindingResult result){
+        if(result.hasErrors()){
+            return "messageform";
+        }
+        messageRepository.save(message);
+        return "redirect:/";
+    }
+
+    @GetMapping("/login")
     public String login(){
         return "login";
     }
 
-    @RequestMapping("/secure")
-    public String  secure(Principal principal, Model model){
-        String username = principal.getName();
-        model.addAttribute("user", userRepository.findByUsername(username));
-        return "secure";
+    @PostMapping("/login")
+        public String passLogin(){
+            return "home";
+        }
+
+    @RequestMapping("/update/{id}")
+    public String updateMessage(@PathVariable("id") long id, Model model){
+        model.addAttribute("message", messageRepository.findById(id).get());
+        return "messageform";
     }
 
+    @RequestMapping("/detail/{id}")
+    public String detailMessage(@PathVariable("id") long id, Model model){
+        model.addAttribute(messageRepository.findById(id).get());
+        return "show";
+    }
 
+    @RequestMapping("/delete/{id}")
+    public String deleteMessage(@PathVariable("id") long id){
+        messageRepository.deleteById(id);
+        return "redirect:/";
+    }
 }

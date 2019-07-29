@@ -2,7 +2,6 @@ package com.example.demo;
 
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.GetMapping;
 
 
 import javax.persistence.*;
@@ -33,6 +32,9 @@ public class User {
 
     @Column(name="username")
     private String username;
+
+    @OneToMany(mappedBy = "user")
+    private Collection <Message> userMessage;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(joinColumns = @JoinColumn(name="user_id"),
@@ -113,5 +115,13 @@ public class User {
 
     public void setRoles(Collection<Role> roles) {
         this.roles = roles;
+    }
+
+    public Collection<Message> getUserMessage() {
+        return userMessage;
+    }
+
+    public void setUserMessage(Collection<Message> userMessage) {
+        this.userMessage = userMessage;
     }
 }
