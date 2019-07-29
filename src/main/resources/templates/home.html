@@ -29,10 +29,11 @@
 
 
         <a class="btn btn-primary" role="button" th:href="@{/detail/{id} (id=${message.id})}">Detail</a>
-
+        <br/>
         <div th:if="${user_id == message.user.id}">
         <a class="btn btn-primary" role="button" th:href="@{/update/{id} (id=${message.id})}">Update</a>
         </div>
+        <br/>
         <div sec:authorize="hasAuthority('ADMIN')">
         <a class="btn btn-danger" role="button" th:href="@{/delete/{id} (id=${message.id})}">Delete</a>
         </div>

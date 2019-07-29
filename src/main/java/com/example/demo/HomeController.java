@@ -87,9 +87,10 @@ public class HomeController {
 
     @GetMapping("/details")
     public String userDetails(Model model){
-        model.addAttribute("messages", messageRepository.findAll());
+        long userId = userService.getUser().getId();
+        model.addAttribute("messages", messageRepository.findByUserId(userId));
         if(userService.getUser() != null) {
-            model.addAttribute("user_id", userService.getUser().getId());
+            model.addAttribute("currentUser", userService.getUser());
         }
         return "userDetails";
     }
