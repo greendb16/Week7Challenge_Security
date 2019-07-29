@@ -9,11 +9,11 @@
 <th:block th:replace="base :: navbar">...</th:block>
 
 <br/><br/><br/>
-<div class="container">
+<div class="container" align="center">
     <div class="jumbotron">
         <form action="#" th:action="@{/process}" th:object="${message}" method="post"  id="inputForm">
             <input type="hidden" th:field="*{id}"/>
-            <input type="hidden" th:field="*{author}" th:value="${user.getUsername()}">
+            <!--<input type="hidden" th:field="*{user.id}" th:value="user_id">-->
             <!--<input type="hidden" th:field="*{author}" th:value="${#authentication.name}">-->
 
             Title: <input type="text" th:field="*{title}">

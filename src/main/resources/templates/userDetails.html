@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <th:block th:replace="base :: Meta">...</th:block>
+    <title>User Details</title>
+</head>
+<body>
+<th:block th:replace="base :: navbar">...</th:block>
+
+<div th:each="message : ${messages}" >
+    <div th:if="user_id==message.user.id">
+    <div class="jumbotron" style="size: inherit">
+        <h3 style="float: left">[[${message.title}]]</h3>
+        <br/><br/>
+        <p>[[${message.content}]]</p>
+        <br/>
+        <p><b>Posted By:</b> [[${message.user.username}]]       <b>Date Posted:</b> [[${message.date}]] </p>
+
+
+        <a class="btn btn-primary" role="button" th:href="@{/detail/{id} (id=${message.id})}">Detail</a>
+            <a class="btn btn-primary" role="button" th:href="@{/update/{id} (id=${message.id})}">Update</a>
+
+        <div sec:authorize="hasAuthority('ADMIN')">
+            <a class="btn btn-danger" role="button" th:href="@{/delete/{id} (id=${message.id})}">Delete</a>
+
+        </div>
+        </div>
+    </div>
+</div>
+
+
+
+<th:block th:replace="base :: bootstrap">...</th:block>
+</body>
+</html>

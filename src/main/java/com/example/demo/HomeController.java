@@ -27,7 +27,9 @@ public class HomeController {
     @RequestMapping("/")
     public String home(Model model){
         model.addAttribute("messages", messageRepository.findAll());
-        model.addAttribute("users",userRepository.findAll());
+        if(userService.getUser() != null) {
+            model.addAttribute("user_id", userService.getUser().getId());
+        }
         return "home";
     }
 
@@ -36,11 +38,14 @@ public class HomeController {
         String username = principal.getName();
         model.addAttribute("message", new Message());
         model.addAttribute("user", userRepository.findByUsername(username));
+
+
         return "messageform";
     }
 
     @PostMapping("/process")
     public String processMessage(@Valid Message message, BindingResult result){
+        message.setUser(userService.getUser());
         if(result.hasErrors()){
             return "messageform";
         }
@@ -61,11 +66,15 @@ public class HomeController {
     @RequestMapping("/update/{id}")
     public String updateMessage(@PathVariable("id") long id, Model model){
         model.addAttribute("message", messageRepository.findById(id).get());
+
         return "messageform";
     }
 
     @RequestMapping("/detail/{id}")
     public String detailMessage(@PathVariable("id") long id, Model model){
+        if(userService.getUser() != null) {
+            model.addAttribute("user_id", userService.getUser().getId());
+        }
         model.addAttribute(messageRepository.findById(id).get());
         return "show";
     }
@@ -74,5 +83,14 @@ public class HomeController {
     public String deleteMessage(@PathVariable("id") long id){
         messageRepository.deleteById(id);
         return "redirect:/";
+    }
+
+    @GetMapping("/details")
+    public String userDetails(Model model){
+        model.addAttribute("messages", messageRepository.findAll());
+        if(userService.getUser() != null) {
+            model.addAttribute("user_id", userService.getUser().getId());
+        }
+        return "userDetails";
     }
 }

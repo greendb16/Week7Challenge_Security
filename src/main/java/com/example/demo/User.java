@@ -33,7 +33,9 @@ public class User {
     @Column(name="username")
     private String username;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany
+    @JoinTable(joinColumns = @JoinColumn(name="user_id"),
+    inverseJoinColumns = @JoinColumn(name="message_id"))
     private Collection <Message> userMessage;
 
     @ManyToMany(fetch = FetchType.EAGER)

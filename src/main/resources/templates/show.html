@@ -17,9 +17,11 @@
 
         <!--</div>-->
         <br/><br/>
-        <p style="float: left"><b>Posted By:</b> [[${message.user}]]         <b>Date Posted:</b> [[${message.date}]] </p><br/><br/>
+        <p style="float: left"><b>Posted By:</b> [[${message.user.username}]]         <b>Date Posted:</b> [[${message.date}]] </p><br/><br/>
         <div th:align="center">
+            <div th:if="${user_id == message.user.id}">
             <a  class="btn btn-primary" role="button" th:href="@{/update/{id} (id=${message.id})}">Update This Post</a>
+            </div>
             <div sec:authorize="hasAuthority('admin')">
             <a  class="btn btn-danger" role="button" th:href="@{/delete/{id} (id=${message.id})}">Delete This Post</a>
             </div>
